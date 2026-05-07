@@ -18,9 +18,9 @@ npm install vxgate
 ## Quick Start
 
 ```js
-import { VioleticsPayment } from 'vxgate';
+import { VXGatePayment } from 'vxgate';
 
-const pay = new VioleticsPayment('vlt_YOUR_API_KEY');
+const pay = new VXGatePayment('vlt_YOUR_API_KEY');
 
 // Buat order + poll sampai lunas
 const { payment, result } = await pay.createAndWait({
@@ -38,7 +38,7 @@ if (result.paid) {
 
 ## API
 
-### `new VioleticsPayment(apiKey, [baseUrl])`
+### `new VXGatePayment(apiKey, [baseUrl])`
 
 | Param | Type | Description |
 |-------|------|-------------|
@@ -147,15 +147,15 @@ const { webhookSecret } = await pay.setWebhook('https://yourapp.com/webhook');
 // Simpan webhookSecret untuk verifikasi signature
 ```
 
-### `VioleticsPayment.verifyWebhook(rawBody, signature, secret)` → `boolean`
+### `VXGatePayment.verifyWebhook(rawBody, signature, secret)` → `boolean`
 
 Verifikasi HMAC-SHA256 webhook signature (Node.js).
 
 ```js
 // Express handler
 app.post('/webhook', express.raw({ type: '*/*' }), (req, res) => {
-  const sig = req.headers['x-violetics-signature'];
-  if (!VioleticsPayment.verifyWebhook(req.body, sig, process.env.WEBHOOK_SECRET))
+  const sig = req.headers['x-vxgate-signature'];
+  if (!VXGatePayment.verifyWebhook(req.body, sig, process.env.WEBHOOK_SECRET))
     return res.sendStatus(401);
 
   const event = JSON.parse(req.body);
@@ -166,21 +166,21 @@ app.post('/webhook', express.raw({ type: '*/*' }), (req, res) => {
 });
 ```
 
-### `VioleticsPayment.verifyWebhookAsync(rawBody, signature, secret)` → `Promise<boolean>`
+### `VXGatePayment.verifyWebhookAsync(rawBody, signature, secret)` → `Promise<boolean>`
 
 Verifikasi webhook (browser-compatible, Web Crypto API).
 
 ## Error Handling
 
 ```js
-import { VioleticsPayment, VioleticsError, VioleticsTimeoutError } from 'vxgate';
+import { VXGatePayment, VXGateError, VXGateTimeoutError } from 'vxgate';
 
 try {
   const result = await pay.poll('ORDER-001', { timeoutMs: 60_000 });
 } catch (err) {
-  if (err instanceof VioleticsTimeoutError) {
+  if (err instanceof VXGateTimeoutError) {
     console.log('Payment belum masuk setelah 60 detik');
-  } else if (err instanceof VioleticsError) {
+  } else if (err instanceof VXGateError) {
     console.log(`API Error ${err.statusCode}: ${err.message}`);
   }
 }
@@ -192,10 +192,10 @@ Package support keduanya:
 
 ```js
 // ESM
-import { VioleticsPayment } from 'vxgate';
+import { VXGatePayment } from 'vxgate';
 
 // CJS
-const { VioleticsPayment } = require('vxgate');
+const { VXGatePayment } = require('vxgate');
 ```
 
 ## Links
