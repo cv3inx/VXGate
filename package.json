@@ -1,0 +1,26 @@
+{
+  "name": "vxgate",
+  "version": "1.0.1",
+  "description": "Violetics Payment Gateway SDK — QRIS payment via Orderkuota API",
+  "keywords": ["qris", "payment", "orderkuota", "violetics", "indonesia", "payment-gateway"],
+  "author": "Violetics",
+  "license": "MIT",
+  "homepage": "https://pg.vltcx.eu.cc/docs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cv3inx/pg"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./src/index.mjs",
+      "require": "./src/index.js",
+      "default": "./src/index.js"
+    }
+  },
+  "files": ["src/", "README.md"],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
