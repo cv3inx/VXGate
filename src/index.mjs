@@ -1,3 +1,3 @@
 // ESM re-export wrapper
-export { VioleticsPayment, VioleticsError, VioleticsTimeoutError } from './index.js';
-export { VioleticsPayment as default } from './index.js';
+export { VXGatePayment, VXGateError, VXGateTimeoutError } from './index.js';
+export { VXGatePayment as default } from './index.js';

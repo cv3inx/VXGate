@@ -42,7 +42,7 @@ const DEFAULT_BASE_URL = 'https://pg.vltcx.eu.cc/api';
  * @property {function} [onPoll]  (attempt: number, status: string) => void
  */
 
-class VioleticsPayment {
+class VXGatePayment {
   /**
    * @param {string} apiKey   - Violetics API Key (format: vlt_xxx)
    * @param {string} [baseUrl]
@@ -60,7 +60,7 @@ class VioleticsPayment {
     const res = await fetch(`${this._baseUrl}?${qs}`);
     const data = await res.json();
     if (!data.status && !data.success)
-      throw new VioleticsError(data.message ?? `HTTP ${res.status}`, res.status, data);
+      throw new VXGateError(data.message ?? `HTTP ${res.status}`, res.status, data);
     return data;
   }
 
@@ -72,7 +72,7 @@ class VioleticsPayment {
     });
     const data = await res.json();
     if (!data.status && !data.success)
-      throw new VioleticsError(data.message ?? `HTTP ${res.status}`, res.status, data);
+      throw new VXGateError(data.message ?? `HTTP ${res.status}`, res.status, data);
     return data;
   }
 
@@ -148,7 +148,7 @@ class VioleticsPayment {
       await new Promise(r => setTimeout(r, wait));
     }
 
-    throw new VioleticsTimeoutError(
+    throw new VXGateTimeoutError(
       `Polling timeout setelah ${timeoutMs / 1000}s`,
       referenceId,
       timeoutMs,
@@ -228,7 +228,7 @@ class VioleticsPayment {
       }
     }
     // Browser (Web Crypto — async, use verifyWebhookAsync instead)
-    throw new Error('Use VioleticsPayment.verifyWebhookAsync() in browser environments');
+    throw new Error('Use VXGatePayment.verifyWebhookAsync() in browser environments');
   }
 
   /**
@@ -250,23 +250,23 @@ class VioleticsPayment {
 
 // ── Custom errors ─────────────────────────────────────────────────────────
 
-class VioleticsError extends Error {
+class VXGateError extends Error {
   constructor(message, statusCode, response) {
     super(message);
-    this.name       = 'VioleticsError';
+    this.name       = 'VXGateError';
     this.statusCode = statusCode;
     this.response   = response;
   }
 }
 
-class VioleticsTimeoutError extends Error {
+class VXGateTimeoutError extends Error {
   constructor(message, referenceId, timeoutMs) {
     super(message);
-    this.name        = 'VioleticsTimeoutError';
+    this.name        = 'VXGateTimeoutError';
     this.referenceId = referenceId;
     this.timeoutMs   = timeoutMs;
   }
 }
 
-module.exports = { VioleticsPayment, VioleticsError, VioleticsTimeoutError };
-module.exports.default = VioleticsPayment;
+module.exports = { VXGatePayment, VXGateError, VXGateTimeoutError };
+module.exports.default = VXGatePayment;
