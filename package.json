@@ -1,6 +1,6 @@
 {
   "name": "vxgate",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "Violetics Payment Gateway SDK — QRIS payment via Orderkuota API",
   "keywords": ["qris", "payment", "orderkuota", "violetics", "indonesia", "payment-gateway"],
   "author": "Violetics",

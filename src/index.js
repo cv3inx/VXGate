@@ -33,6 +33,7 @@ const DEFAULT_BASE_URL = 'https://pg.vltcx.eu.cc/api';
  * @property {string}  [referenceId]
  * @property {string}  [description]
  * @property {number}  [expireMinutes=60]
+ * @property {string}  [webhook]   - Per-transaction webhook URL (overrides global webhook)
  */
 
 /**
@@ -83,12 +84,13 @@ class VXGatePayment {
    * @param {CreateOptions} opts
    * @returns {Promise<PaymentData>}
    */
-  async create({ amount, referenceId, description, expireMinutes = 60 } = {}) {
+  async create({ amount, referenceId, description, expireMinutes = 15, webhook } = {}) {
     if (!amount || amount <= 0) throw new Error('amount harus lebih dari 0');
 
     const params = { amount, expire_minutes: expireMinutes };
     if (referenceId) params.reference_id = referenceId;
     if (description) params.description  = description;
+    if (webhook)     params.webhook      = webhook;
 
     const { data: d } = await this._get('create_payment', params);
     return {
@@ -96,10 +98,12 @@ class VXGatePayment {
       referenceId:     d.reference_id,
       amount:          d.amount,
       amountRequested: d.amount_requested,
+      amountSuffix:    d.amount_suffix,
       qrisUrl:         d.qris_url,
       qrisString:      d.qris_string,
       expiresAt:       d.expires_at,
       expiresAtHuman:  d.expires_at_human,
+      webhook:         d.webhook ?? null,
       status:          d.status,
     };
   }
@@ -210,7 +214,7 @@ class VXGatePayment {
   /**
    * Verifikasi HMAC-SHA256 webhook signature.
    * @param {Buffer|string} rawBody    - Raw request body
-   * @param {string}        signature  - X-Violetics-Signature header value
+   * @param {string}        signature  - X-VXGate-Signature header value
    * @param {string}        secret     - Webhook secret dari setWebhook()
    * @returns {boolean}
    */
